@@ -24,10 +24,15 @@ yarn add @persistenceone/stkbnb-web-sdk
 npm i @persistenceone/stkbnb-web-sdk
 ```
 
+### Docs
+
+The docs are hosted at [GitHub pages](https://persistenceone.github.io/stkBNB-web-sdk/).
+
 ### Usage
 
-For detailed usage examples, please refer the typedocs on the lib functions. A few examples are
-given here:
+For detailed usage examples, please refer the docs
+on [StkBNBWebSDK class](https://persistenceone.github.io/stkBNB-web-sdk/classes/stkbnb_web_sdk.StkBNBWebSDK.html)
+. A few examples are given here:
 
 #### Get stkBNB Balance
 
