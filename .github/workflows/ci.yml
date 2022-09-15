@@ -26,7 +26,15 @@ jobs:
         with:
           node-version: 16
 
-      - name: Install dependencies
+      - name: Retrieve the cached "node_modules" directory (if present)
+        uses: actions/cache@v3
+        id: node-cache
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies (if the cached directory was not found)
+        if: steps.node-cache.outputs.cache-hit != 'true'
         run: npm ci
 
       - name: Run Linter
@@ -56,8 +64,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Retrieve the cached "node_modules" directory (if present)
+        uses: actions/cache@v3
+        id: node-cache
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
-      - name: Install dependencies
+      - name: Install dependencies (if the cached directory was not found)
+        if: steps.node-cache.outputs.cache-hit != 'true'
         run: npm ci
 
       - name: Build UMD, CommonJS and ESM (from TypeScript)
