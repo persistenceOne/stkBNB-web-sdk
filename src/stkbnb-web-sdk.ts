@@ -100,6 +100,9 @@ export interface Options {
  * The main sdk API.
  *
  * ```ts
+ * import { StkBNBWebSDK } from "@persistenceone/stkbnb-web-sdk";
+ * import { ethers } from 'ethers';
+ *
  * const sdk = StkBNBWebSDK.getInstance(); // get the mainnet instance
  * const exchangeRate = await sdk.convertToBNB(ethers.constants.WeiPerEther); // find how much 1 stkBNB is worth
  * console.log(`1 stkBNB = ${StkBNBWebSDK.format(exchangeRate)} BNB`); // 1 stkBNB = 1.004202 BNB
@@ -132,18 +135,25 @@ export class StkBNBWebSDK {
      *
      * ```ts
      * // Get the testnet instance:
+     * import { StkBNBWebSDK, Env } from "@persistenceone/stkbnb-web-sdk";
+     *
      * const sdk = StkBNBWebSDK.getInstance({env: Env.Testnet});
      * ```
      * <br>
      *
      * ```ts
      * // OR get the mainnet instance for reading the blockchain:
+     * import { StkBNBWebSDK } from "@persistenceone/stkbnb-web-sdk";
+     *
      *  const sdk = StkBNBWebSDK.getInstance();
      * ```
      * <br>
      *
      * ```ts
      * // OR get the mainnet instance for carrying out transactions:
+     * import { StkBNBWebSDK, MAINNET_CONFIG } from "@persistenceone/stkbnb-web-sdk";
+     * import { ethers } from 'ethers';
+     *
      * const provider = MAINNET_CONFIG.defaultProvider; // or use your own JSON RPC provider
      * const wallet = ethers.Wallet.fromMnemonic('...').connect(provider); // or use your existing wallet instance
      * const sdk = StkBNBWebSDK.getInstance({signerOrProvider: wallet}); // just provide the signer here
@@ -157,6 +167,9 @@ export class StkBNBWebSDK {
      * Rounds an 18 decimal token balance value to 6 digits of precision to show in the UI.
      *
      * ```ts
+     * import { StkBNBWebSDK } from "@persistenceone/stkbnb-web-sdk";
+     * import { ethers } from 'ethers';
+     *
      * const sdk = StkBNBWebSDK.getInstance(); // get the mainnet instance
      * const exchangeRate = await sdk.convertToBNB(ethers.constants.WeiPerEther); // find how much 1 stkBNB is worth
      * console.log(`1 stkBNB = ${StkBNBWebSDK.format(exchangeRate)} BNB`); // 1 stkBNB = 1.004202 BNB
@@ -175,6 +188,9 @@ export class StkBNBWebSDK {
      * Stake BNB for the signer.
      *
      * ```ts
+     * import { StkBNBWebSDK } from "@persistenceone/stkbnb-web-sdk";
+     * import { ethers } from 'ethers';
+     *
      * const sdk = StkBNBWebSDK.getInstance({signerOrProvider: ...}); // just provide the signer here
      * const { transactionHash } = await sdk.stake(ethers.constants.WeiPerEther); // stake 1 BNB
      * ```
@@ -193,6 +209,9 @@ export class StkBNBWebSDK {
      * The unstaked amount will be available to claim after the cooldown period is over.
      *
      * ```ts
+     * import { StkBNBWebSDK } from "@persistenceone/stkbnb-web-sdk";
+     * import { ethers } from 'ethers';
+     *
      * const sdk = StkBNBWebSDK.getInstance({signerOrProvider: ...}); // just provide the signer here
      * const { transactionHash } = await sdk.unstake(ethers.constants.WeiPerEther); // unstake 1 stkBNB
      * ```
@@ -210,6 +229,8 @@ export class StkBNBWebSDK {
      * Claims all the claim requests for the signer.
      *
      * ```ts
+     * import { StkBNBWebSDK } from "@persistenceone/stkbnb-web-sdk";
+     *
      * const sdk = StkBNBWebSDK.getInstance({signerOrProvider: ...}); // just provide the signer here
      * const { transactionHash } = await sdk.claimAll();
      * ```
@@ -225,6 +246,8 @@ export class StkBNBWebSDK {
      * Claim a particular claim request for the signer.
      *
      * ```ts
+     * import { StkBNBWebSDK } from "@persistenceone/stkbnb-web-sdk";
+     *
      * const sdk = StkBNBWebSDK.getInstance({signerOrProvider: ...}); // just provide the signer here
      * const { transactionHash } = await sdk.claim(0); // claim the request at index 0
      * ```
@@ -242,6 +265,9 @@ export class StkBNBWebSDK {
      * Converts stkBNB to BNB based on the current exchange rate in the contract.
      *
      * ```ts
+     * import { StkBNBWebSDK } from "@persistenceone/stkbnb-web-sdk";
+     * import { ethers } from 'ethers';
+     *
      * const sdk = StkBNBWebSDK.getInstance(); // get the mainnet instance
      * const exchangeRate = await sdk.convertToBNB(ethers.constants.WeiPerEther); // find how much 1 stkBNB is worth
      * console.log(`1 stkBNB = ${StkBNBWebSDK.format(exchangeRate)} BNB`); // 1 stkBNB = 1.004202 BNB
@@ -260,6 +286,9 @@ export class StkBNBWebSDK {
      * Converts BNB to stkBNB based on the current exchange rate in the contract.
      *
      * ```ts
+     * import { StkBNBWebSDK } from "@persistenceone/stkbnb-web-sdk";
+     * import { ethers } from 'ethers';
+     *
      * const sdk = StkBNBWebSDK.getInstance(); // get the mainnet instance
      * const exchangeRate = await sdk.convertToStkBNB(ethers.constants.WeiPerEther); // find how much 1 BNB is worth
      * console.log(`1 BNB = ${StkBNBWebSDK.format(exchangeRate)} stkBNB`); // 1 BNB = 0.995815 stkBNB
@@ -278,6 +307,8 @@ export class StkBNBWebSDK {
      * Fetches all the claim requests for the user.
      *
      * ```ts
+     * import { StkBNBWebSDK } from "@persistenceone/stkbnb-web-sdk";
+     *
      * const sdk = StkBNBWebSDK.getInstance(); // get the mainnet instance
      * const claimRequests = await sdk.getClaims('0xa8E41F290ECfe99488D2F5f6621daf36a592e1D7'); // get all the claim requests for the address 0xa8E41F290ECfe99488D2F5f6621daf36a592e1D7
      * ```
@@ -301,6 +332,8 @@ export class StkBNBWebSDK {
      * Fetches the current TVL (total value locked), aka TVU (total value unlocked)
      *
      * ```ts
+     * import { StkBNBWebSDK } from "@persistenceone/stkbnb-web-sdk";
+     *
      * const sdk = StkBNBWebSDK.getInstance(); // get the mainnet instance
      * const tvl = await sdk.getTvl();
      * console.log(`TVL = ${StkBNBWebSDK.format(tvl, 2)} BNB`); // TVL = 25229.76 BNB
