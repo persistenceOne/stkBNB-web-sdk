@@ -9,6 +9,9 @@ on:
 
 jobs:
   deploy:
+    concurrency:
+      cancel-in-progress: true
+      group: "gh-pages"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
@@ -31,7 +34,7 @@ jobs:
         run: npm ci
 
       - name: Build docs
-        run: npm run typedoc
+        run: npm run build
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.4.0
