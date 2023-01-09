@@ -1,6 +1,7 @@
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import typescript from "@rollup/plugin-typescript";
+import json from "@rollup/plugin-json";
 import camelCase from "lodash.camelcase";
 import { RollupOptions } from "rollup";
 
@@ -22,6 +23,7 @@ const config: RollupOptions[] = [
     plugins: [
       resolve({ preferBuiltins: true }),   // so Rollup can find `ethers`
       commonjs(),  // so Rollup can convert `ethers` to an ES module
+      json(),
       typescript() // so Rollup can convert TypeScript to JavaScript
     ],
     watch: {
