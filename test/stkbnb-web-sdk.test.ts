@@ -100,12 +100,22 @@ function runSuite(env: Env, netConfig: NetworkConfig) {
             );
         }, 60000);
 
+        it('should getApr', async () => {
+            expect(await readableInstance.getApr(7)).toBeGreaterThanOrEqual(
+                ethers.constants.Zero.toBigInt(),
+            );
+        });
+
         it('should get stkBNB', () => {
             expect(readableInstance.stkBNB.address).toBe(netConfig.stkBNB);
         });
 
         it('should get stakePool', () => {
             expect(readableInstance.stakePool.address).toBe(netConfig.stakePool);
+        });
+
+        it('should get subgraph Url', () => {
+            expect(readableInstance.subgraphUrl).toBe(netConfig.subgraphUrl);
         });
     });
 }
