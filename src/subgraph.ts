@@ -12,7 +12,7 @@ async function getCurrentExchangeRate() {
 `;
     let data;
     let exchangeRate;
-    await axios.post(SUBGRAPH_URL, { query: query }).then(result => {
+    await axios.post(SUBGRAPH_URL, { query }).then(result => {
         data = result.data.data;
         exchangeRate = data.stakePoolExchangeRates[0].stkBnbToBnb;
     });
@@ -30,7 +30,7 @@ async function getBlock(n: number) {
     }
 `;
     let data: any;
-    await axios.post(SUBGRAPH_URL, { query: query }).then(result => {
+    await axios.post(SUBGRAPH_URL, { query }).then(result => {
         data = result.data.data;
     });
     return data.stakePoolEpochUpdateEvents[0].blockNum;
@@ -47,7 +47,7 @@ async function getNthExchangeRate(block: any) {
 
     let data;
     let exchangeRate;
-    await axios.post(SUBGRAPH_URL, { query: query }).then(result => {
+    await axios.post(SUBGRAPH_URL, { query }).then(result => {
         data = result.data.data;
         exchangeRate = data.stakePoolExchangeRates[0].stkBnbToBnb;
     });

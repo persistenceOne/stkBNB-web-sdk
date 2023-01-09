@@ -15,7 +15,7 @@ module.exports = {
       "error",
       {
         version: ">=16.0.0",
-        ignores: ["modules"]
+                ignores: ['modules'],
       }
     ]
   }

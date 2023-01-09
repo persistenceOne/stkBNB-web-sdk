@@ -1,7 +1,7 @@
 import { BigNumber, BigNumberish, ContractReceipt, FixedNumber, providers, Signer } from 'ethers';
 import { StakePool__factory, StkBNB__factory } from './contracts'; // eslint-disable-line camelcase, node/no-missing-import
 import type { StakePool, StkBNB } from './contracts'; // eslint-disable-line node/no-missing-import
-import { calculateApr } from '../src/subgraph';
+import { calculateApr } from '../src/subgraph'; // eslint-disable-line node/no-missing-import
 
 /**
  * Type to represent network configuration for different BSC networks
