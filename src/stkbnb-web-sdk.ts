@@ -40,7 +40,7 @@ export const MAINNET_CONFIG: NetworkConfig = {
         chainId: 56,
     }),
     numConfirmations: 5,
-    subgraphUrl: 'https://api.thegraph.com/subgraphs/name/vishal130195/test-service',
+    subgraphUrl: 'https://api.thegraph.com/subgraphs/name/persistenceone/stkbnb',
 };
 
 /**
@@ -54,7 +54,7 @@ export const TESTNET_CONFIG: NetworkConfig = {
         { name: 'BNB Smart Chain Testnet', chainId: 97 },
     ),
     numConfirmations: 1,
-    subgraphUrl: 'https://api.thegraph.com/subgraphs/name/vishal130195/test-service',
+    subgraphUrl: 'https://api.thegraph.com/subgraphs/name/persistenceone/stkbnb---dev',
 };
 
 /**
