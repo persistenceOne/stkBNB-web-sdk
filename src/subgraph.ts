@@ -58,6 +58,5 @@ export async function calculateApr(url: string, n: number): Promise<number> {
     const block: number = await getBlock(url, n);
     const nthExchangeRate: number = await getNthExchangeRate(url, block);
     const apr = ((currentExchangeRate - nthExchangeRate) / n) * 365 * 100;
-    console.log('APR:', n, apr);
     return apr;
 }
