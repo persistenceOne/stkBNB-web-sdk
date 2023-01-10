@@ -344,7 +344,7 @@ export class StkBNBWebSDK {
      * import { StkBNBWebSDK } from "@persistenceone/stkbnb-web-sdk";
      *
      * const sdk = StkBNBWebSDK.getInstance(); // get the mainnet instance
-     * const apr = await sdk.getApr('0xa8E41F290ECfe99488D2F5f6621daf36a592e1D7'); // get all the claim requests for the address 0xa8E41F290ECfe99488D2F5f6621daf36a592e1D7
+     * const apr = await sdk.getApr(7); // get apr% between current Exchange rate and 7 days before exchange rate.
      * ```
      *
      * @param n - Number of days for calculating exchange rate.

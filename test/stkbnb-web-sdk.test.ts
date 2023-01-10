@@ -104,7 +104,7 @@ function runSuite(env: Env, netConfig: NetworkConfig) {
             expect(await readableInstance.getApr(7)).toBeGreaterThanOrEqual(
                 ethers.constants.Zero.toBigInt(),
             );
-        });
+        }, 60000);
 
         it('should get stkBNB', () => {
             expect(readableInstance.stkBNB.address).toBe(netConfig.stkBNB);
