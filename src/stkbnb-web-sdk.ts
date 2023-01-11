@@ -347,7 +347,7 @@ export class StkBNBWebSDK {
      * const apr = await sdk.getApr(7); // get apr% between current Exchange rate and 7 days before exchange rate.
      * ```
      *
-     * @param n - Number of days for calculating exchange rate.
+     * @param n - Number of days for calculating APR.
      *
      * @returns APR% between current and n days before exchange rate.
      */
