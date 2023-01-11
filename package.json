@@ -1,6 +1,6 @@
 {
   "name": "@persistenceone/stkbnb-web-sdk",
-  "version": "1.0.0",
+  "version": "1.1.2",
   "description": "SDK for integrating with stkBNB: pSTAKE's liquid staking solution on Binance!",
   "keywords": [
     "persistenceOne",
