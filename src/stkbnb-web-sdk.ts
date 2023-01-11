@@ -1,6 +1,7 @@
 import { BigNumber, BigNumberish, ContractReceipt, FixedNumber, providers, Signer } from 'ethers';
 import { StakePool__factory, StkBNB__factory } from './contracts'; // eslint-disable-line camelcase, node/no-missing-import
 import type { StakePool, StkBNB } from './contracts'; // eslint-disable-line node/no-missing-import
+import { calculateApr } from '../src/subgraph'; // eslint-disable-line node/no-missing-import
 
 /**
  * Type to represent network configuration for different BSC networks
@@ -22,6 +23,10 @@ export interface NetworkConfig {
      * number of block confirmations to wait for a tx to finalize
      */
     numConfirmations: number;
+    /**
+     * endpoint url of subgraph
+     */
+    subgraphUrl: string;
 }
 
 /**
@@ -35,6 +40,7 @@ export const MAINNET_CONFIG: NetworkConfig = {
         chainId: 56,
     }),
     numConfirmations: 5,
+    subgraphUrl: 'https://api.thegraph.com/subgraphs/name/persistenceone/stkbnb',
 };
 
 /**
@@ -48,6 +54,7 @@ export const TESTNET_CONFIG: NetworkConfig = {
         { name: 'BNB Smart Chain Testnet', chainId: 97 },
     ),
     numConfirmations: 1,
+    subgraphUrl: 'https://api.thegraph.com/subgraphs/name/persistenceone/stkbnb---dev',
 };
 
 /**
@@ -112,6 +119,7 @@ export class StkBNBWebSDK {
     private readonly _stakePool: StakePool;
     private readonly _stkBNB: StkBNB;
     private readonly _numConfirmations: number;
+    private readonly _subgraphUrl: string;
 
     private constructor(opts: Options) {
         let network = MAINNET_CONFIG;
@@ -127,6 +135,7 @@ export class StkBNBWebSDK {
         if (this._numConfirmations < 1) {
             this._numConfirmations = 1;
         }
+        this._subgraphUrl = network.subgraphUrl;
     }
 
     /**
@@ -329,6 +338,24 @@ export class StkBNBWebSDK {
     }
 
     /**
+     * Fetches APR% for n number of days before.
+     *
+     * ```ts
+     * import { StkBNBWebSDK } from "@persistenceone/stkbnb-web-sdk";
+     *
+     * const sdk = StkBNBWebSDK.getInstance(); // get the mainnet instance
+     * const apr = await sdk.getApr(7); // get apr% between current Exchange rate and 7 days before exchange rate.
+     * ```
+     *
+     * @param n - Number of days for calculating APR.
+     *
+     * @returns APR% between current and n days before exchange rate.
+     */
+    public async getApr(n: number): Promise<number> {
+        return await calculateApr(this._subgraphUrl, n);
+    }
+
+    /**
      * Fetches the current TVL (total value locked), aka TVU (total value unlocked)
      *
      * ```ts
@@ -357,5 +384,12 @@ export class StkBNBWebSDK {
      */
     get stakePool(): StakePool {
         return this._stakePool;
+    }
+
+    /**
+     * @returns subgraph url
+     */
+    get subgraphUrl(): string {
+        return this._subgraphUrl;
     }
 }
