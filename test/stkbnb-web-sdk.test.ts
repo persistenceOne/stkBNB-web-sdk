@@ -1,7 +1,7 @@
 import { ethers, Signer, Wallet } from 'ethers';
 import { StkBNBWebSDK } from '../src/stkbnb-web-sdk'; // eslint-disable-line node/no-missing-import
 import { Env, MAINNET_CONFIG, NetworkConfig, TESTNET_CONFIG } from './../src/networkConfig'; // eslint-disable-line node/no-missing-import
-import { StakePoolDomainTestnet } from '../src/eip712-utils';
+import { StakePoolDomainTestnet } from '../src/eip712-utils'; // eslint-disable-line node/no-missing-import
 
 /**
  * SDK tests
@@ -81,7 +81,9 @@ function runSuite(env: Env, netConfig: NetworkConfig) {
         });
 
         it('createAutomatedClaimSignature', async () => {
-            await expect(writableInstance.createAutomatedClaimSignature(0, StakePoolDomainTestnet)).rejects.toThrow();
+            await expect(
+                writableInstance.createAutomatedClaimSignature(0, StakePoolDomainTestnet),
+            ).rejects.toThrow();
         });
 
         it('should convertToBNB', async () => {
@@ -127,7 +129,7 @@ function runSuite(env: Env, netConfig: NetworkConfig) {
         });
 
         it('should getClaimUnlockTime', async () => {
-            const expected = env == Env.Testnet ? 259200 : 1296000;
+            const expected = env === Env.Testnet ? 259200 : 1296000;
             expect(await readableInstance.getClaimUnlockTime()).toEqual(expected);
         });
     });
