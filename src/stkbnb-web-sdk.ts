@@ -1,7 +1,8 @@
-import { BigNumber, BigNumberish, ContractReceipt, FixedNumber, providers, Signer } from 'ethers';
+import { BigNumber, BigNumberish, ContractReceipt, FixedNumber, providers, Signer, TypedDataDomain } from 'ethers';
 import { StakePool__factory, StkBNB__factory } from './contracts'; // eslint-disable-line camelcase, node/no-missing-import
 import type { StakePool, StkBNB } from './contracts'; // eslint-disable-line node/no-missing-import
 import { calculateApr } from '../src/subgraph'; // eslint-disable-line node/no-missing-import
+import { ClaimArgs, ClaimDataType } from './eip712-utils';
 
 /**
  * Type to represent network configuration for different BSC networks
@@ -120,6 +121,7 @@ export class StkBNBWebSDK {
     private readonly _stkBNB: StkBNB;
     private readonly _numConfirmations: number;
     private readonly _subgraphUrl: string;
+    private readonly _signerOrProvider: Signer | providers.Provider;
 
     private constructor(opts: Options) {
         let network = MAINNET_CONFIG;
@@ -127,6 +129,7 @@ export class StkBNBWebSDK {
             network = TESTNET_CONFIG;
         }
         const signerOrProvider = opts.signerOrProvider || network.defaultProvider;
+        this._signerOrProvider = signerOrProvider;
 
         this._stakePool = StakePool__factory.connect(network.stakePool, signerOrProvider); // eslint-disable-line camelcase
         this._stkBNB = StkBNB__factory.connect(network.stkBNB, signerOrProvider); // eslint-disable-line camelcase
@@ -268,6 +271,91 @@ export class StkBNBWebSDK {
     public async claim(index: BigNumberish): Promise<ContractReceipt> {
         const tx = await this._stakePool.claim(index);
         return tx.wait(this._numConfirmations);
+    }
+
+    /**
+     * Claim a particular claim request for the signer instantly. Deducts a fee.
+     *
+     * ```ts
+     * import { StkBNBWebSDK } from "@persistenceone/stkbnb-web-sdk";
+     *
+     * const sdk = StkBNBWebSDK.getInstance({signerOrProvider: ...}); // just provide the signer here
+     * const { transactionHash } = await sdk.instantClaim(0); // claim the request at index 0
+     * ```
+     *
+     * @param index - Index of the claim request to be claimed
+     *
+     * @returns A transaction receipt for the interaction with the contract
+     */
+    public async instantClaim(index: BigNumberish): Promise<ContractReceipt> {
+        const tx = await this._stakePool.instantClaim(index);
+        return tx.wait(this._numConfirmations);
+    }
+
+    /**
+     * Check if a particular claim request for the signer can be claimed instantly.
+     *
+     * ```ts
+     * import { StkBNBWebSDK } from "@persistenceone/stkbnb-web-sdk";
+     *
+     * const sdk = StkBNBWebSDK.getInstance({signerOrProvider: ...}); // just provide the signer here
+     * const yesOrNo = await sdk.canBeClaimedInstantly(0); // check the clami request at index 0
+     * ```
+     *
+     * @param index - Index of the claim request to be claimed
+     *
+     * @returns A transaction receipt for the interaction with the contract
+     */
+    public async canBeClaimedInstantly(index: BigNumberish): Promise<boolean> {
+        const claimReserve = await this._stakePool.claimReserve();
+        const contractBalance = await this._signerOrProvider.getBalance(this._stakePool.address);
+        const excessBnb = contractBalance.sub(claimReserve);
+
+        const userAddress = await (this._signerOrProvider as providers.Web3Provider).getSigner().getAddress(); // TODO: Check if this will work.
+        const claimRequest = await this._stakePool.claimReqs(userAddress, index);
+        const weiToReturn = claimRequest[0]; // weiToReturn is the first field.
+        return excessBnb.gte(weiToReturn);
+    }
+
+    /**
+     * A convenience feature. Creates a signature for the automated claim. 
+     * The users don't pay for gas directly, as it is deducted from their staking rewards.
+     * The signature has to be submitted to a service that will pay for gas at a later time.
+     *
+     * ```ts
+     * import { StkBNBWebSDK } from "@persistenceone/stkbnb-web-sdk";
+     *
+     * const sdk = StkBNBWebSDK.getInstance({signerOrProvider: ...}); // just provide the signer here
+     * const yesOrNo = await sdk.canBeClaimedInstantly(0); // check the clami request at index 0
+     * ```
+     *
+     * @param index - Index of the claim request to be claimed
+     * @param domain - EIP712 domain for the contract.
+     *
+     * @returns A signature that enables the claim to be made in a gasless manner for the user.
+     */
+    public async createAutomatedClaimSignature(index: BigNumberish, stakePoolDomain: TypedDataDomain): Promise<string> {
+        const signer = (this._signerOrProvider as providers.Web3Provider).getSigner(); // TODO: Test this.
+        const claim: ClaimArgs = {
+            index: BigNumber.from(index)
+        }
+        return await signer._signTypedData(stakePoolDomain, ClaimDataType, claim);
+    }
+
+    /**
+     * Get the current unlock period for the claims.
+     *
+     * ```ts
+     * import { StkBNBWebSDK } from "@persistenceone/stkbnb-web-sdk";
+     *
+     * const sdk = StkBNBWebSDK.getInstance({signerOrProvider: ...}); // just provide the signer here
+     * const cooldownPeriodInSeconds = await sdk.getClaimUnlockTime(); // how many seconds need to pass for claim to be unlocked
+     * ```
+     * @returns 
+     */
+    public async getClaimUnlockTime(): Promise<number> {
+        const config = await this._stakePool.config();
+        return config.cooldownPeriod.toNumber();
     }
 
     /**
