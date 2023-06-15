@@ -1,8 +1,16 @@
-import { BigNumber, BigNumberish, ContractReceipt, FixedNumber, providers, Signer, TypedDataDomain } from 'ethers';
+import {
+    BigNumber,
+    BigNumberish,
+    ContractReceipt,
+    FixedNumber,
+    providers,
+    Signer,
+    TypedDataDomain,
+} from 'ethers';
 import { StakePool__factory, StkBNB__factory } from './contracts'; // eslint-disable-line camelcase, node/no-missing-import
 import type { StakePool, StkBNB } from './contracts'; // eslint-disable-line node/no-missing-import
 import { calculateApr } from '../src/subgraph'; // eslint-disable-line node/no-missing-import
-import { ClaimArgs, ClaimDataType } from './eip712-utils';
+import { ClaimArgs, ClaimDataType } from './eip712-utils'; // eslint-disable-line node/no-missing-import
 
 /**
  * Type to represent network configuration for different BSC networks
@@ -311,14 +319,16 @@ export class StkBNBWebSDK {
         const contractBalance = await this._signerOrProvider.getBalance(this._stakePool.address);
         const excessBnb = contractBalance.sub(claimReserve);
 
-        const userAddress = await (this._signerOrProvider as providers.Web3Provider).getSigner().getAddress(); // TODO: Check if this will work.
+        const userAddress = await (this._signerOrProvider as providers.Web3Provider)
+            .getSigner()
+            .getAddress(); // TODO: Check if this will work.
         const claimRequest = await this._stakePool.claimReqs(userAddress, index);
         const weiToReturn = claimRequest[0]; // weiToReturn is the first field.
         return excessBnb.gte(weiToReturn);
     }
 
     /**
-     * A convenience feature. Creates a signature for the automated claim. 
+     * A convenience feature. Creates a signature for the automated claim.
      * The users don't pay for gas directly, as it is deducted from their staking rewards.
      * The signature has to be submitted to a service that will pay for gas at a later time.
      *
@@ -334,11 +344,14 @@ export class StkBNBWebSDK {
      *
      * @returns A signature that enables the claim to be made in a gasless manner for the user.
      */
-    public async createAutomatedClaimSignature(index: BigNumberish, stakePoolDomain: TypedDataDomain): Promise<string> {
+    public async createAutomatedClaimSignature(
+        index: BigNumberish,
+        stakePoolDomain: TypedDataDomain,
+    ): Promise<string> {
         const signer = (this._signerOrProvider as providers.Web3Provider).getSigner(); // TODO: Test this.
         const claim: ClaimArgs = {
-            index: BigNumber.from(index)
-        }
+            index: BigNumber.from(index),
+        };
         return await signer._signTypedData(stakePoolDomain, ClaimDataType, claim);
     }
 
@@ -351,7 +364,7 @@ export class StkBNBWebSDK {
      * const sdk = StkBNBWebSDK.getInstance({signerOrProvider: ...}); // just provide the signer here
      * const cooldownPeriodInSeconds = await sdk.getClaimUnlockTime(); // how many seconds need to pass for claim to be unlocked
      * ```
-     * @returns 
+     * @returns
      */
     public async getClaimUnlockTime(): Promise<number> {
         const config = await this._stakePool.config();
