@@ -301,6 +301,7 @@ export class StkBNBWebSDK {
      */
     public async getClaimUnlockTime(): Promise<number> {
         const config = await this._stakePool.config();
+        console.log(config);
         return config.cooldownPeriod.toNumber();
     }
 
