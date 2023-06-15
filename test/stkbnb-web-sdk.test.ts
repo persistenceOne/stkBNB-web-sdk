@@ -1,11 +1,6 @@
-import {
-    Env,
-    MAINNET_CONFIG,
-    NetworkConfig,
-    StkBNBWebSDK,
-    TESTNET_CONFIG,
-} from '../src/stkbnb-web-sdk'; // eslint-disable-line node/no-missing-import
 import { ethers, Signer, Wallet } from 'ethers';
+import { StkBNBWebSDK } from '../src/stkbnb-web-sdk'; // eslint-disable-line node/no-missing-import
+import { Env, MAINNET_CONFIG, NetworkConfig, TESTNET_CONFIG } from './../src/networkConfig'; // eslint-disable-line node/no-missing-import
 
 /**
  * SDK tests

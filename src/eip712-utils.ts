@@ -1,5 +1,5 @@
 import { BigNumber, TypedDataDomain } from 'ethers';
-import { MAINNET_CONFIG, TESTNET_CONFIG } from './stkbnb-web-sdk'; // eslint-disable-line node/no-missing-import
+import { MAINNET_CONFIG, TESTNET_CONFIG } from './networkConfig'; // eslint-disable-line node/no-missing-import
 
 export const StakePoolDomainTestnet: TypedDataDomain = {
     name: 'Stake Pool',
