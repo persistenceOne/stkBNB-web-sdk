@@ -226,21 +226,13 @@
   {
     "anonymous": false,
     "inputs": [],
-<<<<<<< HEAD
     "name": "ClaimFeeConfigUpdated",
-=======
-    "name": "ConfigUpdated",
->>>>>>> main
     "type": "event"
   },
   {
     "anonymous": false,
     "inputs": [],
-<<<<<<< HEAD
     "name": "ConfigUpdated",
-=======
-    "name": "ConfigV2Updated",
->>>>>>> main
     "type": "event"
   },
   {
@@ -605,7 +597,6 @@
     "type": "function"
   },
   {
-<<<<<<< HEAD
     "inputs": [],
     "name": "claimFeeConfig",
     "outputs": [
@@ -624,8 +615,6 @@
     "type": "function"
   },
   {
-=======
->>>>>>> main
     "inputs": [
       {
         "internalType": "address",
@@ -742,27 +731,6 @@
   },
   {
     "inputs": [],
-<<<<<<< HEAD
-=======
-    "name": "configV2",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "instantClaimFeePercentage",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "automatedClaimFee",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
->>>>>>> main
     "name": "deposit",
     "outputs": [],
     "stateMutability": "payable",
@@ -1031,13 +999,8 @@
             "type": "uint256"
           }
         ],
-<<<<<<< HEAD
         "internalType": "struct ClaimFeeConfig.ClaimFeeConfigData",
         "name": "claimFeeConfig_",
-=======
-        "internalType": "struct ConfigV2.DataV2",
-        "name": "configV2_",
->>>>>>> main
         "type": "tuple"
       }
     ],
@@ -1171,7 +1134,6 @@
       {
         "components": [
           {
-<<<<<<< HEAD
             "internalType": "uint256",
             "name": "instantClaimFeePercentage",
             "type": "uint256"
@@ -1197,8 +1159,6 @@
       {
         "components": [
           {
-=======
->>>>>>> main
             "internalType": "address",
             "name": "bcStakingWallet",
             "type": "address"
@@ -1262,34 +1222,6 @@
     "type": "function"
   },
   {
-<<<<<<< HEAD
-=======
-    "inputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "instantClaimFeePercentage",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "automatedClaimFee",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ConfigV2.DataV2",
-        "name": "configV2_",
-        "type": "tuple"
-      }
-    ],
-    "name": "updateConfigV2",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
->>>>>>> main
     "stateMutability": "payable",
     "type": "receive"
   }
