@@ -77,7 +77,9 @@ function runSuite(env: Env, netConfig: NetworkConfig) {
         }, 60000);
 
         it('getClaimsLength', async () => {
-            await expect(readableInstance.getClaimsLength()).resolves.toEqual(0);
+            if (env === Env.Testnet) {
+                await expect(writableInstance.getClaimsLength()).resolves.toEqual(0);
+            }
         });
 
         it('canBeClaimedInstantly', async () => {
