@@ -233,22 +233,20 @@ export class StkBNBWebSDK {
         return tx.wait(this._numConfirmations);
     }
 
-    
     /**
      * Get the number of claims for the current user.
-     * 
+     *
      * ```ts
      * import { StkBNBWebSDK } from "@persistenceone/stkbnb-web-sdk";
      *
      * const sdk = StkBNBWebSDK.getInstance({signerOrProvider: ...}); // just provide the signer here
-     * const numberOfClaims = await sdk.getClaimsLength(); // you get the number of claims for the current user 
+     * const numberOfClaims = await sdk.getClaimsLength(); // you get the number of claims for the current user
      * ```
      *
      * @returns A promise that resolves to the number of claims for the current user.
      */
     public async getClaimsLength(): Promise<number> {
-        const userAddress = await (this._signerOrProvider as Signer)
-        .getAddress();
+        const userAddress = await (this._signerOrProvider as Signer).getAddress();
 
         const length = await this._stakePool.getClaimRequestCount(userAddress);
         return length.toNumber();
@@ -273,8 +271,7 @@ export class StkBNBWebSDK {
         const contractBalance = await this._signerOrProvider.getBalance(this._stakePool.address);
         const excessBnb = contractBalance.sub(claimReserve);
 
-        const userAddress = await (this._signerOrProvider as Signer)
-            .getAddress(); 
+        const userAddress = await (this._signerOrProvider as Signer).getAddress();
         const claimRequest = await this._stakePool.claimReqs(userAddress, index);
         const weiToReturn = claimRequest[0]; // weiToReturn is the first field.
         return excessBnb.gte(weiToReturn);
