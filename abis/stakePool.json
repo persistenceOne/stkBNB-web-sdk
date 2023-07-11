@@ -226,13 +226,13 @@
   {
     "anonymous": false,
     "inputs": [],
-    "name": "ConfigUpdated",
+    "name": "ClaimFeeConfigUpdated",
     "type": "event"
   },
   {
     "anonymous": false,
     "inputs": [],
-    "name": "ConfigV2Updated",
+    "name": "ConfigUpdated",
     "type": "event"
   },
   {
@@ -597,6 +597,24 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "claimFeeConfig",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "instantClaimFeePercentage",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "automatedClaimFee",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -706,24 +724,6 @@
         "internalType": "struct FeeDistribution.Data",
         "name": "fee",
         "type": "tuple"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "configV2",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "instantClaimFeePercentage",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "automatedClaimFee",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -999,8 +999,8 @@
             "type": "uint256"
           }
         ],
-        "internalType": "struct ConfigV2.DataV2",
-        "name": "configV2_",
+        "internalType": "struct ClaimFeeConfig.ClaimFeeConfigData",
+        "name": "claimFeeConfig_",
         "type": "tuple"
       }
     ],
@@ -1134,6 +1134,31 @@
       {
         "components": [
           {
+            "internalType": "uint256",
+            "name": "instantClaimFeePercentage",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "automatedClaimFee",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct ClaimFeeConfig.ClaimFeeConfigData",
+        "name": "claimFeeConfig_",
+        "type": "tuple"
+      }
+    ],
+    "name": "updateClaimFeeConfig",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
             "internalType": "address",
             "name": "bcStakingWallet",
             "type": "address"
@@ -1192,31 +1217,6 @@
       }
     ],
     "name": "updateConfig",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "instantClaimFeePercentage",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "automatedClaimFee",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ConfigV2.DataV2",
-        "name": "configV2_",
-        "type": "tuple"
-      }
-    ],
-    "name": "updateConfigV2",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
