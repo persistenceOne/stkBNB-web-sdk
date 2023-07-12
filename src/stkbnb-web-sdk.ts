@@ -1,11 +1,4 @@
-import {
-    BigNumber,
-    BigNumberish,
-    ContractReceipt,
-    FixedNumber,
-    providers,
-    Signer
-} from 'ethers';
+import { BigNumber, BigNumberish, ContractReceipt, FixedNumber, providers, Signer } from 'ethers';
 import { StakePool__factory, StkBNB__factory } from './contracts'; // eslint-disable-line camelcase, node/no-missing-import
 import type { StakePool, StkBNB } from './contracts'; // eslint-disable-line node/no-missing-import
 import { calculateApr } from '../src/subgraph'; // eslint-disable-line node/no-missing-import
@@ -275,12 +268,12 @@ export class StkBNBWebSDK {
 
     /**
      * Get the available amount for instant claim requests.
-     * 
+     *
      * ```ts
      * import { StkBNBWebSDK } from "@persistenceone/stkbnb-web-sdk";
      *
      * const sdk = StkBNBWebSDK.getInstance({signerOrProvider: ...}); // provide at least the provider
-     * const weiAvailable = await sdk.getInstantClaimAvailableAmount(); 
+     * const weiAvailable = await sdk.getInstantClaimAvailableAmount();
      * ```
      *
      * @param index - Index of the claim request to be claimed for that specific user.
