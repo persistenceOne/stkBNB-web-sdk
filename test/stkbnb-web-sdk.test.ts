@@ -86,7 +86,9 @@ function runSuite(env: Env, netConfig: NetworkConfig) {
         });
 
         it('getInstantClaimAvailableAmount', async () => {
-            expect(ethers.constants.Zero.lte(await readableInstance.getInstantClaimAvailableAmount()))
+            expect(
+                ethers.constants.Zero.lte(await readableInstance.getInstantClaimAvailableAmount()),
+            );
         });
 
         it('should convertToBNB', async () => {
