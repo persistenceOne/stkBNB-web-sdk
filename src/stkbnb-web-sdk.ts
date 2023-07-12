@@ -4,13 +4,11 @@ import {
     ContractReceipt,
     FixedNumber,
     providers,
-    Signer,
-    TypedDataDomain,
+    Signer
 } from 'ethers';
 import { StakePool__factory, StkBNB__factory } from './contracts'; // eslint-disable-line camelcase, node/no-missing-import
 import type { StakePool, StkBNB } from './contracts'; // eslint-disable-line node/no-missing-import
 import { calculateApr } from '../src/subgraph'; // eslint-disable-line node/no-missing-import
-import { ClaimArgs, ClaimDataType } from './eip712-utils'; // eslint-disable-line node/no-missing-import
 import { Env, MAINNET_CONFIG, TESTNET_CONFIG } from './networkConfig'; // eslint-disable-line node/no-missing-import
 
 /**
@@ -259,17 +257,15 @@ export class StkBNBWebSDK {
      * import { StkBNBWebSDK } from "@persistenceone/stkbnb-web-sdk";
      *
      * const sdk = StkBNBWebSDK.getInstance({signerOrProvider: ...}); // just provide the signer here
-     * const yesOrNo = await sdk.canBeClaimedInstantly(0); // check the clami request at index 0
+     * const yesOrNo = await sdk.canBeClaimedInstantly(0); // check the claim request at index 0
      * ```
      *
-     * @param index - Index of the claim request to be claimed
+     * @param index - Index of the claim request to be claimed for that specific user.
      *
-     * @returns A transaction receipt for the interaction with the contract
+     * @returns A promise that resolves to a boolean value indicating if the claim request can be claimed instantly.
      */
     public async canBeClaimedInstantly(index: BigNumberish): Promise<boolean> {
-        const claimReserve = await this._stakePool.claimReserve();
-        const contractBalance = await this._signerOrProvider.getBalance(this._stakePool.address);
-        const excessBnb = contractBalance.sub(claimReserve);
+        const excessBnb = await this.getInstantClaimAvailableAmount();
 
         const userAddress = await (this._signerOrProvider as Signer).getAddress();
         const claimRequest = await this._stakePool.claimReqs(userAddress, index);
@@ -278,31 +274,23 @@ export class StkBNBWebSDK {
     }
 
     /**
-     * A convenience feature. Creates a signature for the automated claim.
-     * The users don't pay for gas directly, as it is deducted from their staking rewards.
-     * The signature has to be submitted to a service that will pay for gas at a later time.
-     *
+     * Get the available amount for instant claim requests.
+     * 
      * ```ts
      * import { StkBNBWebSDK } from "@persistenceone/stkbnb-web-sdk";
      *
-     * const sdk = StkBNBWebSDK.getInstance({signerOrProvider: ...}); // just provide the signer here
-     * const yesOrNo = await sdk.canBeClaimedInstantly(0); // check the clami request at index 0
+     * const sdk = StkBNBWebSDK.getInstance({signerOrProvider: ...}); // provide at least the provider
+     * const weiAvailable = await sdk.getInstantClaimAvailableAmount(); 
      * ```
      *
-     * @param index - Index of the claim request to be claimed
-     * @param domain - EIP712 domain for the contract.
+     * @param index - Index of the claim request to be claimed for that specific user.
      *
-     * @returns A signature that enables the claim to be made in a gasless manner for the user.
+     * @returns A promise that resolves to the available wei amount for instant claim requests.
      */
-    public async createAutomatedClaimSignature(
-        index: BigNumberish,
-        stakePoolDomain: TypedDataDomain,
-    ): Promise<string> {
-        const signer = (this._signerOrProvider as providers.Web3Provider).getSigner(); // TODO: Test this.
-        const claim: ClaimArgs = {
-            index: BigNumber.from(index),
-        };
-        return await signer._signTypedData(stakePoolDomain, ClaimDataType, claim);
+    public async getInstantClaimAvailableAmount(): Promise<BigNumber> {
+        const claimReserve = await this._stakePool.claimReserve();
+        const contractBalance = await this._signerOrProvider.getBalance(this._stakePool.address);
+        return contractBalance.sub(claimReserve);
     }
 
     /**
