@@ -199,7 +199,7 @@ export class StkBNBWebSDK {
     public async claimAll(
         overrides?: Overrides & { from?: PromiseOrValue<string> },
     ): Promise<ContractReceipt> {
-        const tx = await this._stakePool.claimAll({... overrides});
+        const tx = await this._stakePool.claimAll({ ...overrides });
         return tx.wait(this._numConfirmations);
     }
 
