@@ -6,7 +6,7 @@ export const StakePoolDomainLocalhost: TypedDataDomain = {
     version: 'v2',
     chainId: 31337, // Hardhat
     verifyingContract: LOCALHOST_CONFIG.stakePool,
-}
+};
 
 export const StakePoolDomainTestnet: TypedDataDomain = {
     name: 'Stake Pool',

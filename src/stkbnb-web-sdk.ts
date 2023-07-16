@@ -1,9 +1,17 @@
-import { BigNumber, BigNumberish, ContractReceipt, FixedNumber, Overrides, providers, Signer } from 'ethers';
+import {
+    BigNumber,
+    BigNumberish,
+    ContractReceipt,
+    FixedNumber,
+    Overrides,
+    providers,
+    Signer,
+} from 'ethers';
 import { StakePool__factory, StkBNB__factory } from './contracts'; // eslint-disable-line camelcase, node/no-missing-import
 import type { StakePool, StkBNB } from './contracts'; // eslint-disable-line node/no-missing-import
 import { calculateApr } from '../src/subgraph'; // eslint-disable-line node/no-missing-import
 import { Env, MAINNET_CONFIG, TESTNET_CONFIG } from './networkConfig'; // eslint-disable-line node/no-missing-import
-import { PromiseOrValue } from './contracts/common';
+import { PromiseOrValue } from './contracts/common'; // eslint-disable-line node/no-missing-import
 
 /**
  * Configuration options for sdk
@@ -144,7 +152,10 @@ export class StkBNBWebSDK {
      *
      * @returns A transaction receipt for the interaction with the contract
      */
-    public async stake(amount: BigNumberish, overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<ContractReceipt> {
+    public async stake(
+        amount: BigNumberish,
+        overrides?: Overrides & { from?: PromiseOrValue<string> },
+    ): Promise<ContractReceipt> {
         const tx = await this._stakePool.deposit({ ...overrides, value: amount });
         return tx.wait(this._numConfirmations);
     }
@@ -165,8 +176,11 @@ export class StkBNBWebSDK {
      *
      * @returns A transaction receipt for the interaction with the contract
      */
-    public async unstake(amount: BigNumberish, overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<ContractReceipt> {
-        const tx = await this._stkBNB.send(this._stakePool.address, amount, [], overrides);
+    public async unstake(
+        amount: BigNumberish,
+        overrides?: Overrides & { from?: PromiseOrValue<string> },
+    ): Promise<ContractReceipt> {
+        const tx = await this._stkBNB.send(this._stakePool.address, amount, [], { ...overrides });
         return tx.wait(this._numConfirmations);
     }
 
@@ -182,8 +196,10 @@ export class StkBNBWebSDK {
      *
      * @returns A transaction receipt for the interaction with the contract
      */
-    public async claimAll(overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<ContractReceipt> {
-        const tx = await this._stakePool.claimAll(overrides);
+    public async claimAll(
+        overrides?: Overrides & { from?: PromiseOrValue<string> },
+    ): Promise<ContractReceipt> {
+        const tx = await this._stakePool.claimAll({... overrides});
         return tx.wait(this._numConfirmations);
     }
 
@@ -201,8 +217,11 @@ export class StkBNBWebSDK {
      *
      * @returns A transaction receipt for the interaction with the contract
      */
-    public async claim(index: BigNumberish, overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<ContractReceipt> {
-        const tx = await this._stakePool.claim(index, overrides);
+    public async claim(
+        index: BigNumberish,
+        overrides?: Overrides & { from?: PromiseOrValue<string> },
+    ): Promise<ContractReceipt> {
+        const tx = await this._stakePool.claim(index, { ...overrides });
         return tx.wait(this._numConfirmations);
     }
 
@@ -220,8 +239,16 @@ export class StkBNBWebSDK {
      *
      * @returns A transaction receipt for the interaction with the contract
      */
-    public async instantClaim(amount: BigNumberish, overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<ContractReceipt> {
-        const tx = await this._stkBNB.send(this._stakePool.address, amount, Buffer.from("instant"), overrides);
+    public async instantClaim(
+        amount: BigNumberish,
+        overrides?: Overrides & { from?: PromiseOrValue<string> },
+    ): Promise<ContractReceipt> {
+        const tx = await this._stkBNB.send(
+            this._stakePool.address,
+            amount,
+            Buffer.from('instant'),
+            { ...overrides },
+        );
         return tx.wait(this._numConfirmations);
     }
 

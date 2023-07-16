@@ -75,10 +75,10 @@ export const TESTNET_CONFIG: NetworkConfig = {
 export const LOCALHOST_CONFIG: NetworkConfig = {
     stakePool: '0x2279b7a0a67db372996a5fab50d91eaa73d2ebe6',
     stkBNB: '0x5fc8d32690cc91d4c39d9d3abcbd16989f875707',
-    defaultProvider: new providers.JsonRpcProvider(
-        'http://localhost:8545',
-        { name: 'Hardhat Localhost', chainId: 31337 },
-    ),
+    defaultProvider: new providers.JsonRpcProvider('http://localhost:8545', {
+        name: 'Hardhat Localhost',
+        chainId: 31337,
+    }),
     numConfirmations: 1,
     subgraphUrl: '',
-}
+};
