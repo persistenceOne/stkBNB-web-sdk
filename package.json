@@ -53,7 +53,7 @@
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "/test/"
+      "/test/e2e-localhost/"
     ],
     "coverageThreshold": {
       "global": {

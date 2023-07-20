@@ -1,6 +1,6 @@
 import { ethers, Signer, Wallet } from 'ethers';
-import { StkBNBWebSDK } from '../src/stkbnb-web-sdk'; // eslint-disable-line node/no-missing-import
-import { Env, MAINNET_CONFIG, NetworkConfig, TESTNET_CONFIG } from './../src/networkConfig'; // eslint-disable-line node/no-missing-import
+import { StkBNBWebSDK } from '../../src/stkbnb-web-sdk'; // eslint-disable-line node/no-missing-import
+import { Env, MAINNET_CONFIG, NetworkConfig, TESTNET_CONFIG } from '../../src/networkConfig'; // eslint-disable-line node/no-missing-import
 
 /**
  * SDK tests
@@ -79,17 +79,17 @@ function runSuite(env: Env, netConfig: NetworkConfig) {
             if (env === Env.Testnet) {
                 await expect(writableInstance.getClaimsLength()).resolves.toEqual(0);
             }
-        });
+        }, 10000);
 
         it('canBeClaimedInstantly', async () => {
             await expect(writableInstance.canBeClaimedInstantly(0)).rejects.toThrow();
-        });
+        }, 10000);
 
         it('getInstantClaimAvailableAmount', async () => {
             expect(
                 ethers.constants.Zero.lte(await readableInstance.getInstantClaimAvailableAmount()),
             );
-        });
+        }, 10000);
 
         it('should convertToBNB', async () => {
             expect(
@@ -136,6 +136,6 @@ function runSuite(env: Env, netConfig: NetworkConfig) {
         it('should getClaimUnlockTime', async () => {
             const expected = env === Env.Testnet ? 259200 : 1296000;
             expect(await readableInstance.getClaimUnlockTime()).toEqual(expected);
-        });
+        }, 10000);
     });
 }

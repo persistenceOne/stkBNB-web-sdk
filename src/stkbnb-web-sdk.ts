@@ -1,8 +1,17 @@
-import { BigNumber, BigNumberish, ContractReceipt, FixedNumber, providers, Signer } from 'ethers';
+import {
+    BigNumber,
+    BigNumberish,
+    ContractReceipt,
+    FixedNumber,
+    Overrides,
+    providers,
+    Signer,
+} from 'ethers';
 import { StakePool__factory, StkBNB__factory } from './contracts'; // eslint-disable-line camelcase, node/no-missing-import
 import type { StakePool, StkBNB } from './contracts'; // eslint-disable-line node/no-missing-import
 import { calculateApr } from '../src/subgraph'; // eslint-disable-line node/no-missing-import
 import { Env, MAINNET_CONFIG, TESTNET_CONFIG } from './networkConfig'; // eslint-disable-line node/no-missing-import
+import { PromiseOrValue } from './contracts/common'; // eslint-disable-line node/no-missing-import
 
 /**
  * Configuration options for sdk
@@ -143,8 +152,11 @@ export class StkBNBWebSDK {
      *
      * @returns A transaction receipt for the interaction with the contract
      */
-    public async stake(amount: BigNumberish): Promise<ContractReceipt> {
-        const tx = await this._stakePool.deposit({ value: amount });
+    public async stake(
+        amount: BigNumberish,
+        overrides?: Overrides & { from?: PromiseOrValue<string> },
+    ): Promise<ContractReceipt> {
+        const tx = await this._stakePool.deposit({ ...overrides, value: amount });
         return tx.wait(this._numConfirmations);
     }
 
@@ -164,8 +176,11 @@ export class StkBNBWebSDK {
      *
      * @returns A transaction receipt for the interaction with the contract
      */
-    public async unstake(amount: BigNumberish): Promise<ContractReceipt> {
-        const tx = await this._stkBNB.send(this._stakePool.address, amount, []);
+    public async unstake(
+        amount: BigNumberish,
+        overrides?: Overrides & { from?: PromiseOrValue<string> },
+    ): Promise<ContractReceipt> {
+        const tx = await this._stkBNB.send(this._stakePool.address, amount, [], { ...overrides });
         return tx.wait(this._numConfirmations);
     }
 
@@ -181,8 +196,10 @@ export class StkBNBWebSDK {
      *
      * @returns A transaction receipt for the interaction with the contract
      */
-    public async claimAll(): Promise<ContractReceipt> {
-        const tx = await this._stakePool.claimAll();
+    public async claimAll(
+        overrides?: Overrides & { from?: PromiseOrValue<string> },
+    ): Promise<ContractReceipt> {
+        const tx = await this._stakePool.claimAll({ ...overrides });
         return tx.wait(this._numConfirmations);
     }
 
@@ -200,8 +217,11 @@ export class StkBNBWebSDK {
      *
      * @returns A transaction receipt for the interaction with the contract
      */
-    public async claim(index: BigNumberish): Promise<ContractReceipt> {
-        const tx = await this._stakePool.claim(index);
+    public async claim(
+        index: BigNumberish,
+        overrides?: Overrides & { from?: PromiseOrValue<string> },
+    ): Promise<ContractReceipt> {
+        const tx = await this._stakePool.claim(index, { ...overrides });
         return tx.wait(this._numConfirmations);
     }
 
@@ -219,8 +239,16 @@ export class StkBNBWebSDK {
      *
      * @returns A transaction receipt for the interaction with the contract
      */
-    public async instantClaim(index: BigNumberish): Promise<ContractReceipt> {
-        const tx = await this._stakePool.instantClaim(index);
+    public async instantClaim(
+        amount: BigNumberish,
+        overrides?: Overrides & { from?: PromiseOrValue<string> },
+    ): Promise<ContractReceipt> {
+        const tx = await this._stkBNB.send(
+            this._stakePool.address,
+            amount,
+            Buffer.from('instant'),
+            { ...overrides },
+        );
         return tx.wait(this._numConfirmations);
     }
 

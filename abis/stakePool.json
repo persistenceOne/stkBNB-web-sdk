@@ -952,19 +952,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "index",
-        "type": "uint256"
-      }
-    ],
-    "name": "instantClaim",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "pause",
     "outputs": [],
@@ -1088,7 +1075,7 @@
       },
       {
         "internalType": "bytes",
-        "name": "",
+        "name": "userData",
         "type": "bytes"
       },
       {
