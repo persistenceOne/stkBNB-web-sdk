@@ -6,12 +6,16 @@ import {
     Overrides,
     providers,
     Signer,
+    TypedDataDomain,
+    VoidSigner,
 } from 'ethers';
 import { StakePool__factory, StkBNB__factory } from './contracts'; // eslint-disable-line camelcase, node/no-missing-import
 import type { StakePool, StkBNB } from './contracts'; // eslint-disable-line node/no-missing-import
 import { calculateApr } from '../src/subgraph'; // eslint-disable-line node/no-missing-import
-import { Env, MAINNET_CONFIG, TESTNET_CONFIG } from './networkConfig'; // eslint-disable-line node/no-missing-import
+import { Env, NetworkConfigMap } from './networkConfig'; // eslint-disable-line node/no-missing-import
 import { PromiseOrValue } from './contracts/common'; // eslint-disable-line node/no-missing-import
+import { ClaimDataType, StakePoolDomainMap } from './eip712-utils';
+import axios from 'axios';
 
 /**
  * Configuration options for sdk
@@ -62,13 +66,14 @@ export class StkBNBWebSDK {
     private readonly _stkBNB: StkBNB;
     private readonly _numConfirmations: number;
     private readonly _subgraphUrl: string;
+    private readonly _autoclaimerUrl: string;
     private readonly _signerOrProvider: Signer | providers.Provider;
+    private readonly _stakePoolEip712Domain: TypedDataDomain;;
 
     private constructor(opts: Options) {
-        let network = MAINNET_CONFIG;
-        if (opts.env === Env.Testnet) {
-            network = TESTNET_CONFIG;
-        }
+        let network = NetworkConfigMap[opts.env || Env.Mainnet];
+        this._stakePoolEip712Domain = StakePoolDomainMap[opts.env || Env.Mainnet];
+        
         const signerOrProvider = opts.signerOrProvider || network.defaultProvider;
         this._signerOrProvider = signerOrProvider;
 
@@ -80,6 +85,7 @@ export class StkBNBWebSDK {
             this._numConfirmations = 1;
         }
         this._subgraphUrl = network.subgraphUrl;
+        this._autoclaimerUrl = network.autoclaimerUrl;
     }
 
     /**
@@ -250,6 +256,33 @@ export class StkBNBWebSDK {
             { ...overrides },
         );
         return tx.wait(this._numConfirmations);
+    }
+
+    /**
+     * Create and submit a signature for automated claim requests after the unstaking period is finished. Deducts a fee.
+     *
+     * ```ts
+     * import { StkBNBWebSDK } from "@persistenceone/stkbnb-web-sdk";
+     *
+     * const sdk = StkBNBWebSDK.getInstance({signerOrProvider: ...}); // just provide the signer here
+     * // create a signature for the claim request at index and submit it to the transaction autoclaimer
+     * const { transactionHash } = await sdk.initiateAutomatedClaim(0); 
+     * ```
+     *
+     * @param index - Index of the claim request to be claimed
+     *
+     * @returns An http response after submitting the EIP712 signature to the transaction forwarder.
+     */
+    public async scheduleAutomatedClaim(index: BigNumberish) {
+        const signer = this._signerOrProvider as VoidSigner;
+        const userAddress = await signer.getAddress();
+        const signature = await signer._signTypedData(this._stakePoolEip712Domain, ClaimDataType, { index });
+        return await axios.post(`${this._autoclaimerUrl}/automated-claim-tx`, {
+            address: userAddress,
+            claimIndex: index,
+            chainId: this._stakePoolEip712Domain.chainId,
+            signature
+        });
     }
 
     /**
