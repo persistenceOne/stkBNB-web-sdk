@@ -1,25 +1,34 @@
 import { BigNumber, TypedDataDomain } from 'ethers';
-import { MAINNET_CONFIG, TESTNET_CONFIG, LOCALHOST_CONFIG } from './networkConfig'; // eslint-disable-line node/no-missing-import
+import { Env, NetworkConfigMap } from './networkConfig'; // eslint-disable-line node/no-missing-import
 
-export const StakePoolDomainLocalhost: TypedDataDomain = {
+const StakePoolDomainLocalhost: TypedDataDomain = {
     name: 'Stake Pool',
     version: 'v2',
     chainId: 31337, // Hardhat
-    verifyingContract: LOCALHOST_CONFIG.stakePool,
+    verifyingContract: NetworkConfigMap[Env.Localhost].stakePool,
 };
 
-export const StakePoolDomainTestnet: TypedDataDomain = {
+const StakePoolDomainTestnet: TypedDataDomain = {
     name: 'Stake Pool',
     version: 'v2',
     chainId: 97, // BSC testnet
-    verifyingContract: TESTNET_CONFIG.stakePool,
+    verifyingContract: NetworkConfigMap[Env.Testnet].stakePool,
 };
 
-export const StakePoolDomainMainnet: TypedDataDomain = {
+const StakePoolDomainMainnet: TypedDataDomain = {
     name: 'Stake Pool',
     version: 'v2',
     chainId: 56, // BSC mainnet
-    verifyingContract: MAINNET_CONFIG.stakePool,
+    verifyingContract: NetworkConfigMap[Env.Mainnet].stakePool,
+};
+
+// eslint-disable-next-line no-unused-vars
+type TypedDataDomainMap = { [key in Env]: TypedDataDomain };
+
+export const StakePoolDomainMap: TypedDataDomainMap = {
+    [Env.Localhost]: StakePoolDomainLocalhost,
+    [Env.Testnet]: StakePoolDomainTestnet,
+    [Env.Mainnet]: StakePoolDomainMainnet,
 };
 
 export const ClaimDataType = {

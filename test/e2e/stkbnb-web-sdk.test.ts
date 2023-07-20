@@ -1,6 +1,6 @@
 import { ethers, Signer, Wallet } from 'ethers';
 import { StkBNBWebSDK } from '../../src/stkbnb-web-sdk'; // eslint-disable-line node/no-missing-import
-import { Env, MAINNET_CONFIG, NetworkConfig, TESTNET_CONFIG } from '../../src/networkConfig'; // eslint-disable-line node/no-missing-import
+import { Env, NetworkConfig, NetworkConfigMap } from '../../src/networkConfig'; // eslint-disable-line node/no-missing-import
 
 /**
  * SDK tests
@@ -26,8 +26,8 @@ describe('stkBNB-web-sdk tests', () => {
         expect(StkBNBWebSDK.format('1234567491234567890', 3)).toEqual('1.235');
     });
 
-    runSuite(Env.Mainnet, MAINNET_CONFIG);
-    runSuite(Env.Testnet, TESTNET_CONFIG);
+    runSuite(Env.Mainnet, NetworkConfigMap[Env.Mainnet]);
+    runSuite(Env.Testnet, NetworkConfigMap[Env.Testnet]);
 });
 
 function runSuite(env: Env, netConfig: NetworkConfig) {

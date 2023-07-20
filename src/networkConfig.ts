@@ -24,6 +24,10 @@ export interface NetworkConfig {
      * endpoint url of subgraph
      */
     subgraphUrl: string;
+    /**
+     * endpoint url of transaction forwarder for automated claim transactions
+     */
+    autoclaimerUrl: string;
 }
 
 /**
@@ -47,7 +51,7 @@ export enum Env {
 /**
  * Network configuration for mainnet
  */
-export const MAINNET_CONFIG: NetworkConfig = {
+const MAINNET_CONFIG: NetworkConfig = {
     stakePool: '0xC228CefDF841dEfDbD5B3a18dFD414cC0dbfa0D8',
     stkBNB: '0xc2E9d07F66A89c44062459A47a0D2Dc038E4fb16',
     defaultProvider: new providers.JsonRpcProvider('https://bsc-dataseed.binance.org/', {
@@ -56,12 +60,13 @@ export const MAINNET_CONFIG: NetworkConfig = {
     }),
     numConfirmations: 5,
     subgraphUrl: 'https://api.thegraph.com/subgraphs/name/persistenceone/stkbnb',
+    autoclaimerUrl: '', // TODO: Implement
 };
 
 /**
  * Network configuration for testnet
  */
-export const TESTNET_CONFIG: NetworkConfig = {
+const TESTNET_CONFIG: NetworkConfig = {
     stakePool: '0x7CdFba1Ee6A8D1e688B4B34A56b62287ce400802',
     stkBNB: '0xF7CE8444b3b1c62e785a25343a8B4764198A81B8',
     defaultProvider: new providers.JsonRpcProvider(
@@ -70,10 +75,11 @@ export const TESTNET_CONFIG: NetworkConfig = {
     ),
     numConfirmations: 1,
     subgraphUrl: 'https://api.thegraph.com/subgraphs/name/persistenceone/stkbnb---dev',
+    autoclaimerUrl: '', // TODO: Implement
 };
 
-export const LOCALHOST_CONFIG: NetworkConfig = {
-    stakePool: '0x2279b7a0a67db372996a5fab50d91eaa73d2ebe6',
+const LOCALHOST_CONFIG: NetworkConfig = {
+    stakePool: '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853',
     stkBNB: '0x5fc8d32690cc91d4c39d9d3abcbd16989f875707',
     defaultProvider: new providers.JsonRpcProvider('http://localhost:8545', {
         name: 'Hardhat Localhost',
@@ -81,4 +87,12 @@ export const LOCALHOST_CONFIG: NetworkConfig = {
     }),
     numConfirmations: 1,
     subgraphUrl: '',
+    autoclaimerUrl: '', // TODO: Implement
+};
+
+// eslint-disable-next-line no-unused-vars
+export const NetworkConfigMap: { [key in Env]: NetworkConfig } = {
+    [Env.Localhost]: LOCALHOST_CONFIG,
+    [Env.Testnet]: TESTNET_CONFIG,
+    [Env.Mainnet]: MAINNET_CONFIG,
 };
