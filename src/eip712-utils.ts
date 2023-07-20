@@ -22,11 +22,14 @@ const StakePoolDomainMainnet: TypedDataDomain = {
     verifyingContract: NetworkConfigMap[Env.Mainnet].stakePool,
 };
 
-export const StakePoolDomainMap: { [key in Env]: TypedDataDomain } = {
+// eslint-disable-next-line no-unused-vars
+type TypedDataDomainMap = { [key in Env]: TypedDataDomain };
+
+export const StakePoolDomainMap: TypedDataDomainMap = {
     [Env.Localhost]: StakePoolDomainLocalhost,
     [Env.Testnet]: StakePoolDomainTestnet,
     [Env.Mainnet]: StakePoolDomainMainnet,
-}
+};
 
 export const ClaimDataType = {
     Claim: [{ name: 'index', type: 'uint256' }],

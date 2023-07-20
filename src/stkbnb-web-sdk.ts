@@ -15,7 +15,7 @@ import type { StakePool, StkBNB } from './contracts'; // eslint-disable-line nod
 import { calculateApr } from '../src/subgraph'; // eslint-disable-line node/no-missing-import
 import { Env, NetworkConfigMap } from './networkConfig'; // eslint-disable-line node/no-missing-import
 import { PromiseOrValue } from './contracts/common'; // eslint-disable-line node/no-missing-import
-import { ClaimDataType, StakePoolDomainMap } from './eip712-utils';
+import { ClaimDataType, StakePoolDomainMap } from './eip712-utils'; // eslint-disable-line node/no-missing-import
 
 /**
  * Configuration options for sdk
@@ -68,12 +68,12 @@ export class StkBNBWebSDK {
     private readonly _subgraphUrl: string;
     private readonly _autoclaimerUrl: string;
     private readonly _signerOrProvider: Signer | providers.Provider;
-    private readonly _stakePoolEip712Domain: TypedDataDomain;;
+    private readonly _stakePoolEip712Domain: TypedDataDomain;
 
     private constructor(opts: Options) {
-        let network = NetworkConfigMap[opts.env || Env.Mainnet];
+        const network = NetworkConfigMap[opts.env || Env.Mainnet];
         this._stakePoolEip712Domain = StakePoolDomainMap[opts.env || Env.Mainnet];
-        
+
         const signerOrProvider = opts.signerOrProvider || network.defaultProvider;
         this._signerOrProvider = signerOrProvider;
 
@@ -266,7 +266,7 @@ export class StkBNBWebSDK {
      *
      * const sdk = StkBNBWebSDK.getInstance({signerOrProvider: ...}); // just provide the signer here
      * // create a signature for the claim request at index and submit it to the transaction autoclaimer
-     * const { transactionHash } = await sdk.initiateAutomatedClaim(0); 
+     * const { transactionHash } = await sdk.initiateAutomatedClaim(0);
      * ```
      *
      * @param index - Index of the claim request to be claimed
@@ -276,12 +276,14 @@ export class StkBNBWebSDK {
     public async scheduleAutomatedClaim(index: BigNumberish) {
         const signer = this._signerOrProvider as VoidSigner;
         const userAddress = await signer.getAddress();
-        const signature = await signer._signTypedData(this._stakePoolEip712Domain, ClaimDataType, { index });
+        const signature = await signer._signTypedData(this._stakePoolEip712Domain, ClaimDataType, {
+            index,
+        });
         return await axios.post(`${this._autoclaimerUrl}/automated-claim-tx`, {
             address: userAddress,
             claimIndex: index,
             chainId: this._stakePoolEip712Domain.chainId,
-            signature
+            signature,
         });
     }
 

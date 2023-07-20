@@ -60,7 +60,7 @@ const MAINNET_CONFIG: NetworkConfig = {
     }),
     numConfirmations: 5,
     subgraphUrl: 'https://api.thegraph.com/subgraphs/name/persistenceone/stkbnb',
-    autoclaimerUrl: "" // TODO: Implement
+    autoclaimerUrl: '', // TODO: Implement
 };
 
 /**
@@ -75,7 +75,7 @@ const TESTNET_CONFIG: NetworkConfig = {
     ),
     numConfirmations: 1,
     subgraphUrl: 'https://api.thegraph.com/subgraphs/name/persistenceone/stkbnb---dev',
-    autoclaimerUrl: "" // TODO: Implement
+    autoclaimerUrl: '', // TODO: Implement
 };
 
 const LOCALHOST_CONFIG: NetworkConfig = {
@@ -87,11 +87,12 @@ const LOCALHOST_CONFIG: NetworkConfig = {
     }),
     numConfirmations: 1,
     subgraphUrl: '',
-    autoclaimerUrl: "" // TODO: Implement
+    autoclaimerUrl: '', // TODO: Implement
 };
 
+// eslint-disable-next-line no-unused-vars
 export const NetworkConfigMap: { [key in Env]: NetworkConfig } = {
     [Env.Localhost]: LOCALHOST_CONFIG,
     [Env.Testnet]: TESTNET_CONFIG,
     [Env.Mainnet]: MAINNET_CONFIG,
-}
+};

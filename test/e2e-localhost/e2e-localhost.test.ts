@@ -12,7 +12,9 @@ describe.skip('End to end tests', () => {
     let signer: Wallet;
 
     beforeAll(async () => {
-        signer = Wallet.fromMnemonic(LOCALHOST_MNEMONIC).connect(NetworkConfigMap[Env.Localhost].defaultProvider);
+        signer = Wallet.fromMnemonic(LOCALHOST_MNEMONIC).connect(
+            NetworkConfigMap[Env.Localhost].defaultProvider,
+        );
         instance = StkBNBWebSDK.getInstance({
             env: Env.Localhost,
             numConfirmations: 1,
@@ -40,7 +42,7 @@ describe.skip('End to end tests', () => {
         console.log(await signer.getBalance());
     });
 
-    it.skip("should create a valid signature", async () => {
+    it.skip('should create a valid signature', async () => {
         await instance.stake(ethers.constants.WeiPerEther.mul(4), { gasLimit: 1000000 });
         await instance.unstake(ethers.constants.WeiPerEther.mul(1), { gasLimit: 1000000 });
         console.log(await instance.getClaimsLength());
