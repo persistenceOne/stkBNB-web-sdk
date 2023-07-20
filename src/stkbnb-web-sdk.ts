@@ -9,13 +9,13 @@ import {
     TypedDataDomain,
     VoidSigner,
 } from 'ethers';
+import axios from 'axios';
 import { StakePool__factory, StkBNB__factory } from './contracts'; // eslint-disable-line camelcase, node/no-missing-import
 import type { StakePool, StkBNB } from './contracts'; // eslint-disable-line node/no-missing-import
 import { calculateApr } from '../src/subgraph'; // eslint-disable-line node/no-missing-import
 import { Env, NetworkConfigMap } from './networkConfig'; // eslint-disable-line node/no-missing-import
 import { PromiseOrValue } from './contracts/common'; // eslint-disable-line node/no-missing-import
 import { ClaimDataType, StakePoolDomainMap } from './eip712-utils';
-import axios from 'axios';
 
 /**
  * Configuration options for sdk

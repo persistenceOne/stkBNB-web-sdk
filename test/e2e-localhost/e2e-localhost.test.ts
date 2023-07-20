@@ -1,4 +1,3 @@
-// import { Wallet, ethers } from "ethers";
 import { Wallet, ethers } from 'ethers';
 import { Env, NetworkConfigMap } from '../../src/networkConfig'; // eslint-disable-line node/no-missing-import
 import { StkBNBWebSDK } from '../../src/stkbnb-web-sdk'; // eslint-disable-line node/no-missing-import
