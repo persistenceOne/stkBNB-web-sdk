@@ -3,7 +3,7 @@ import axios from 'axios';
 async function getCurrentExchangeRate(url: string): Promise<number> {
     const query: string = `
     {
-      stakePoolExchangeRates{
+      exchangeRates{
         stkBnbToBnb
       }
     }
@@ -12,7 +12,7 @@ async function getCurrentExchangeRate(url: string): Promise<number> {
     let exchangeRate: number = 0;
     await axios.post(url, { query }).then(result => {
         data = result.data.data;
-        exchangeRate = data.stakePoolExchangeRates[0].stkBnbToBnb;
+        exchangeRate = data.exchangeRates[0].stkBnbToBnb;
     });
 
     return exchangeRate;
@@ -21,19 +21,19 @@ async function getCurrentExchangeRate(url: string): Promise<number> {
 async function getBlock(url: string, n: number): Promise<number> {
     const query: string = `
     {
-        stakePoolEpochUpdateEvents(
+        epochUpdates(
           skip:${n},
           first:1,
-          orderBy: blockNum,
+          orderBy: blockNumber,
           orderDirection: desc
         ) {
-            blockNum
+            blockNumber
         }
     }
 `;
     let blockNum: number = 0;
     await axios.post(url, { query }).then(result => {
-        blockNum = Number(result.data.data.stakePoolEpochUpdateEvents[0].blockNum);
+        blockNum = Number(result.data.data.epochUpdates[0].blockNumber);
     });
     return blockNum;
 }
@@ -41,14 +41,14 @@ async function getBlock(url: string, n: number): Promise<number> {
 async function getNthExchangeRate(url: string, block: number): Promise<number> {
     const query: string = `
     {
-      stakePoolExchangeRates(block: {number: ${block}}) {
+      exchangeRates(block: {number: ${block}}) {
         stkBnbToBnb
       }
     }
 `;
     let exchangeRate: number = 0;
     await axios.post(url, { query }).then(result => {
-        exchangeRate = result.data.data.stakePoolExchangeRates[0].stkBnbToBnb;
+        exchangeRate = result.data.data.exchangeRates[0].stkBnbToBnb;
     });
     return exchangeRate;
 }
