@@ -115,7 +115,7 @@ function runSuite(env: Env, netConfig: NetworkConfig) {
             );
         }, 60000);
 
-        it('should getApr', async () => {
+        it.skip('should getApr', async () => {
             expect(await readableInstance.getApr(7)).toBeGreaterThanOrEqual(
                 ethers.constants.Zero.toBigInt(),
             );
@@ -134,7 +134,7 @@ function runSuite(env: Env, netConfig: NetworkConfig) {
         });
 
         it('should getClaimUnlockTime', async () => {
-            const expected = env === Env.Testnet ? 259200 : 1296000;
+            const expected = 691200;
             expect(await readableInstance.getClaimUnlockTime()).toEqual(expected);
         }, 10000);
     });

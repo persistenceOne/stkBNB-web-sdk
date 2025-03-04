@@ -55,15 +55,15 @@ export const MAINNET_CONFIG: NetworkConfig = {
         chainId: 56,
     }),
     numConfirmations: 5,
-    subgraphUrl: 'https://api.thegraph.com/subgraphs/name/persistenceone/stkbnb',
+    subgraphUrl: 'https://api.studio.thegraph.com/query/28057/stkbnb-v2/version/latest',
 };
 
 /**
  * Network configuration for testnet
  */
 export const TESTNET_CONFIG: NetworkConfig = {
-    stakePool: '0x7CdFba1Ee6A8D1e688B4B34A56b62287ce400802',
-    stkBNB: '0xF7CE8444b3b1c62e785a25343a8B4764198A81B8',
+    stakePool: '0xC0540e366C5BE6e1F13Be3F23e32db6d077eE30a',
+    stkBNB: '0x060f1b0bb2Bf7E76c3627F7FEC44Bfc198A7c35d',
     defaultProvider: new providers.JsonRpcProvider(
         'https://data-seed-prebsc-1-s1.binance.org:8545',
         { name: 'BNB Smart Chain Testnet', chainId: 97 },
